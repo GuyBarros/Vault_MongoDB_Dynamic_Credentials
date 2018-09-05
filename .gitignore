@@ -1,0 +1,13 @@
+.vagrant
+*.log
+main
+.vault-token
+.provisioner-token
+.approle-id
+.secret-id
+.orchestrator-token
+scripts/*.json
+secret_id_config.json
+.wrapped-provisioner-token
+.admin-token
+.appRoleID

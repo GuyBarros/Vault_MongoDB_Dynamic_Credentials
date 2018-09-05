@@ -1,0 +1,14 @@
+{
+    "service": {
+      "name": "PUT_SERVICE_NAME_HERE",
+      "tags": [],
+      "address": "",
+      "meta": {
+        "meta": "The GoApp Service"
+      },
+      "port": "REPLACE_WITH_PORT",
+      "enable_tag_override": false,
+      "checks": [
+      ]
+    }
+  }
