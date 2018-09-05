@@ -19,6 +19,8 @@ fi
 
 # enable database secret engine
 VAULT_TOKEN=`cat /usr/local/bootstrap/.vault-token`
+VAULT_ADDR="http://${IP}:8200"
+
 sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault secrets enable database
 
 # configure Audit Backend
