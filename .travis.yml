@@ -6,7 +6,6 @@ addons:
     - lynx
     - jq
     - curl
-    - mongodb
 before_script:
 - sudo rsync -az ${TRAVIS_BUILD_DIR}/ /usr/local/bootstrap/
 - bash scripts/install_consul.sh
@@ -14,6 +13,7 @@ before_script:
 - bash scripts/vault_basic_role_config.sh
 - bash scripts/configure_app_role.sh
 - bash scripts/test_appRole.sh
+- bash scripts/install_mongodb.sh
 - sudo cp /home/travis/.vault-token /usr/local/bootstrap/.vault-token
 script:
 - source ./var.env

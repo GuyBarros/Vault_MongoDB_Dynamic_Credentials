@@ -5,6 +5,7 @@ Vagrant.configure("2") do |config|
     ENV['GO_HOST_PORT']||="808"
     ENV['LEADER_NAME']||="leader01"
     ENV['LEADER_IP']||="192.168.2.11"
+    ENV['MONGO_IP']||="192.168.2.12"
     ENV['SERVER_COUNT']||="1"
     ENV['DD_API_KEY']||="DON'T FORGET TO SET ME FROM CLI PRIOR TO DEPLOYMENT"
     
@@ -30,14 +31,13 @@ Vagrant.configure("2") do |config|
         leader01.vm.network "forwarded_port", guest: 8200, host: 8200
     end
 
-    (1..1).each do |i|
-        config.vm.define "godev0#{i}" do |devsvr|
-            devsvr.vm.hostname = "godev0#{i}"
-            devsvr.vm.network "private_network", ip: "192.168.2.#{100+i*10}"
-            devsvr.vm.provision "shell", path: "scripts/install_mongodb.sh"
-            devsvr.vm.network "forwarded_port", guest: 8314, host: 8314
-        end
+    config.vm.define "MONGODB_SVR" do |devsvr|
+        devsvr.vm.hostname = "MONGODB_SVR"
+        devsvr.vm.network "private_network", ip: ENV['MONGO_IP']
+        devsvr.vm.provision "shell", path: "scripts/install_mongodb.sh"
+        devsvr.vm.network "forwarded_port", guest: 8314, host: 8314
     end
+
 
 
 end
