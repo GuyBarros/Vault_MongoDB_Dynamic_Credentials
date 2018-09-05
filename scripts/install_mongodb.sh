@@ -24,6 +24,17 @@ setup_environment () {
 
 }
 
+secure_mongodb () {
+    # Enable MongoDB Authentication
+    sudo service mongod stop
+    sudo echo "security:" >> /etc/mongod.conf
+    sudo echo " authorization:  enabled" >> /etc/mongod.conf
+    # Bind to all interfaces - not just localhost
+    sudo sed -i '/bindIp:/s/^/#/' /etc/mongod.conf
+    sudo service mongod start
+    sudo service mongod status
+}
+
 install_mongodb () {
 
     # Install MongoDB
@@ -35,18 +46,8 @@ install_mongodb () {
     
     # Add new database user accounts 
     sudo mongo /usr/local/bootstrap/conf/configureMongoDBusers.js
-    #move config file to where it can be edited TRAVIS Hack
-    #sudo cp /etc/mongod.conf /usr/local/bootstrap/conf/mongod.conf
-    #sudo cat /etc/mongod.conf
-    #sudo ls -al /etc/mongod.conf
-    # Enable MongoDB Authentication
-    sudo service mongod stop
-    sudo echo "security:" >> /etc/mongod.conf
-    sudo echo " authorization:  enabled" >> /etc/mongod.conf
-    # Bind to all interfaces - not just localhost
-    sudo sed -i '/bindIp:/s/^/#/' /etc/mongod.conf
-    sudo service mongod start
-    sudo service mongod status
+
+
 
 
 }
@@ -54,5 +55,8 @@ install_mongodb () {
 echo 'Start of Application Installation and Test'
 setup_environment
 install_mongodb
+if [ "${TRAVIS}" != "true" ]; then
+    secure_mongodb
+fi
 echo 'End of Application Installation and Test'
 
