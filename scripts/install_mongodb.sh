@@ -46,6 +46,6 @@ install_mongodb () {
 
 echo 'Start of Application Installation and Test'
 setup_environment
-install_nomgodb
+install_mongodb
 echo 'End of Application Installation and Test'
 
