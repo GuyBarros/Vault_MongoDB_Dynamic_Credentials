@@ -7,9 +7,10 @@ source /usr/local/bootstrap/var.env
 echo 'Start Vault MongoDB Dynamic Credentials Config'
 
 IP=${LEADER_IP}
-
+DB=${MONGO_IP}
 if [ "${TRAVIS}" == "true" ]; then
-IP="127.0.0.1"
+    IP="127.0.0.1"
+    DB=${IP}
 fi
 
 if [ -d /vagrant ]; then
@@ -47,7 +48,7 @@ curl \
 sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault write database/config/my-mongodb-database \
     plugin_name=mongodb-database-plugin \
     allowed_roles="my-dbOwner-role, my-dbAdmin-role" \
-    connection_url="mongodb://{{username}}:{{password}}@192.168.2.12:27017/vault_demo_db?ssl=false" \
+    connection_url="mongodb://{{username}}:{{password}}@${DB}:27017/vault_demo_db?ssl=false" \
     username="vault_admin" \
     password="r3ally5tr0ngPa55w0rd"
 
