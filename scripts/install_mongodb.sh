@@ -31,15 +31,22 @@ install_mongodb () {
     sudo echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/ubuntu "$(lsb_release -sc)"/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-3.4.list
     sudo apt-get update
     sudo apt-get install -y mongodb-org
-    sudo service mongod status
-    sleep 60
+    sudo service mongod start
+    
     # Add new database user accounts 
-    sudo mongo conf/configureMongoDBusers.js
+    sudo mongo /usr/local/bootstrap/conf/configureMongoDBusers.js
+    #move config file to where it can be edited TRAVIS Hack
+    #sudo cp /etc/mongod.conf /usr/local/bootstrap/conf/mongod.conf
+    #sudo cat /etc/mongod.conf
+    #sudo ls -al /etc/mongod.conf
     # Enable MongoDB Authentication
-    sudo echo "security:\n  authorization:\tenabled" >> /etc/mongod.conf
+    sudo service mongod stop
+    sudo echo "security:" >> /etc/mongod.conf
+    sudo echo " authorization:  enabled" >> /etc/mongod.conf
     # Bind to all interfaces - not just localhost
     sudo sed -i '/bindIp:/s/^/#/' /etc/mongod.conf
-    sudo service mongod restart
+    sudo service mongod start
+    sudo service mongod status
 
 
 }

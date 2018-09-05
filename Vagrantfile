@@ -31,11 +31,11 @@ Vagrant.configure("2") do |config|
         leader01.vm.network "forwarded_port", guest: 8200, host: 8200
     end
 
-    config.vm.define "MONGODB_SVR" do |devsvr|
-        devsvr.vm.hostname = "MONGODB_SVR"
+    config.vm.define "MONGOSVR" do |devsvr|
+        devsvr.vm.hostname = "MONGOSVR"
         devsvr.vm.network "private_network", ip: ENV['MONGO_IP']
         devsvr.vm.provision "shell", path: "scripts/install_mongodb.sh"
-        devsvr.vm.network "forwarded_port", guest: 8314, host: 8314
+        devsvr.vm.network "forwarded_port", guest: 27017, host: 27017
     end
 
 
