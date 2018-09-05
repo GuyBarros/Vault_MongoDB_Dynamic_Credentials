@@ -14,7 +14,7 @@ Vagrant.configure("2") do |config|
     config.vm.synced_folder ".", "/usr/local/bootstrap"
     config.vm.box = "allthingscloud/go-counter-demo"
     config.vm.provision "shell", path: "scripts/install_consul.sh", run: "always"
-
+    config.vm.provision "shell", path: "scripts/install_vault.sh", run: "always"
     config.vm.provider "virtualbox" do |v|
         v.memory = 1024
         v.cpus = 1
@@ -22,7 +22,6 @@ Vagrant.configure("2") do |config|
 
     config.vm.define "leader01" do |leader01|
         leader01.vm.hostname = ENV['LEADER_NAME']
-        leader01.vm.provision "shell", path: "scripts/install_vault.sh", run: "always"
         leader01.vm.provision "shell", path: "scripts/vault_basic_role_config.sh", run: "always"
         leader01.vm.network "private_network", ip: ENV['LEADER_IP']
         leader01.vm.network "forwarded_port", guest: 8500, host: 8500
@@ -37,7 +36,6 @@ Vagrant.configure("2") do |config|
         devsvr.vm.provision "shell", path: "scripts/test_vault_dynamic_creds.sh"
         devsvr.vm.network "forwarded_port", guest: 27017, host: 27017
     end
-
 
 
 end

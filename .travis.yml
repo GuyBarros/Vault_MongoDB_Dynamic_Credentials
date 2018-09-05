@@ -11,13 +11,13 @@ before_script:
 - bash scripts/install_consul.sh
 - bash scripts/install_vault.sh
 - bash scripts/vault_basic_role_config.sh
-- bash scripts/vault_enable_mongodb.sh
 - bash scripts/install_mongodb.sh
 - sudo cp /home/travis/.vault-token /usr/local/bootstrap/.vault-token
 script:
 - source ./var.env
 - export LEADER_IP=127.0.0.1
 - sudo VAULT_ADDR=http://127.0.0.1:8200 vault status
+- bash scripts/vault_enable_mongodb.sh
 - bash scripts/test_vault_dynamic_creds.sh 2>&1 | tee result.txt
 deploy:
   provider: releases
