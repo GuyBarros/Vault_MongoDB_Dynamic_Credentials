@@ -9,7 +9,7 @@ echo 'Start Vault MongoDB Dynamic Credentials Config'
 IP=${LEADER_IP}
 
 if [ "${TRAVIS}" == "true" ]; then
-IP=${IP:-127.0.0.1}
+IP="127.0.0.1"
 fi
 
 if [ -d /vagrant ]; then
