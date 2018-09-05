@@ -21,6 +21,8 @@ test_db_user () {
     mongo 192.168.2.12/vault_demo_db -u ${DYNAMIC_USER} -p ${DYNAMIC_PASSWORD} --eval "printjson(db.getName())"
 }
 
+sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault status
+
 echo "Testing the DB Admin Role - This should fail to list all the users"
 sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-dbAdmin-role > /usr/local/bootstrap/.dynamicuserdetails.txt
 test_db_user
