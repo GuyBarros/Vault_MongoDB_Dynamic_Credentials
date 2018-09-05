@@ -22,7 +22,6 @@ Vagrant.configure("2") do |config|
     config.vm.define "leader01" do |leader01|
         leader01.vm.hostname = ENV['LEADER_NAME']
         leader01.vm.provision "shell", path: "scripts/install_vault.sh", run: "always"
-        leader01.vm.provision "shell", path: "scripts/install_nomad.sh", run: "always"
         leader01.vm.provision "shell", path: "scripts/vault_basic_role_config.sh", run: "always"
         leader01.vm.provision "shell", path: "scripts/configure_app_role.sh", run: "always"
         leader01.vm.provision "shell", path: "scripts/test_appRole.sh", run: "always"
@@ -35,8 +34,7 @@ Vagrant.configure("2") do |config|
         config.vm.define "godev0#{i}" do |devsvr|
             devsvr.vm.hostname = "godev0#{i}"
             devsvr.vm.network "private_network", ip: "192.168.2.#{100+i*10}"
-            devsvr.vm.provision "shell", path: "scripts/install_nomad.sh", run: "always"
-            devsvr.vm.provision "shell", path: "scripts/install_go_app.sh"
+            devsvr.vm.provision "shell", path: "scripts/install_mongodb.sh"
             devsvr.vm.network "forwarded_port", guest: 8314, host: 8314
         end
     end
