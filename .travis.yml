@@ -1,4 +1,4 @@
-language: go
+language: minimal
 sudo: required
 addons:
   apt:
@@ -6,13 +6,9 @@ addons:
     - lynx
     - jq
     - curl
-go:
-- '1.10'
+    - mongodb
 before_script:
 - sudo rsync -az ${TRAVIS_BUILD_DIR}/ /usr/local/bootstrap/
-- pushd packer
-- if [ $VAGRANT_CLOUD_TOKEN ] ; then packer validate template.json ; fi
-- popd
 - bash scripts/install_consul.sh
 - bash scripts/install_vault.sh
 - bash scripts/vault_basic_role_config.sh
@@ -23,15 +19,13 @@ script:
 - source ./var.env
 - export LEADER_IP=127.0.0.1
 - sudo VAULT_ADDR=http://127.0.0.1:8200 vault status
-- bash scripts/install_Go_app.sh
 deploy:
   provider: releases
   api_key:
-    secure: C0KYLkyOUIiA8I1n6aer2HMscY18LMkqYsA6E5EHpx6CcCNUzuGVr594Bjp+LyFmR3uqNYTppR4hdJheNqIF+mg/subSPNAJgWH4eV7D1HJEgLSTZljEf1T4/7Bo5/nqmAJd0TC0CxRGk9+GH6PxMrFmppndLxt9A17YaKAYtjoF6UbepBtEFUh7+D0XV8FGVnlb5RR5NEJo7f6wZH/AG4c+tT/xVk68j+DU+TNisnDYsOCMycT6q6eGMSESfCuY6FBM9xdocvu3KvRSo/9/5JNBnmuKFT100T61u60M46nr8lnEk4OAS/u8dDTBt4ierZonQTN4msFFRTAxfuyeUjF1uttY6J381cDyvdfqeNfMD2/liHLzF/x0+LW4hF88ewRbgDld16SfKnmkkYWMno5efrToJq3t3N3xRAyu9P5mISXJQ/y+fUIsehZ/yu6YC0ojf+IVdW6EVbAG+jsp8TK1zWWueHGSqx20Z3/kDR15TlZ3YncItu5pDO8WBOEsPpQrKSGKb/jKdAwTSrtajUjxoWrbVSNycFhY9UuClnPjEttz3XtQU/Kdbeva/QnVfETM407ia/mJ1Y+qOVildKVR4BuCUCLFVvvmHv9m8HsXg1OlDr7cH+dD820X0lRAlzHaTXwUmtqZlfInWvgO6hKLA9lTO/YhVdLy0msljh8=
+    secure: HIMy1VnYJJ5vF/yobaFDegYN6hABelnqfG5P8HlTuKsvz07yJAEXjActtyTqHaZ0t8SK+djLHQv7nr7La+a5aMLzUTI/12UQ0sc1921SN2Xv7NFT1I8GtMKDXNh02Wzm3Q4XXrKena11NAl+n7kCcU0yDeqHtyCes7AynQmIEf5AtgMf4ejboeuQREOAQ3S7a1dZJLSyjwCUB9jwvzjCikgT6xEBGc/fSZGLSiZ3BBniuZSdBbXF2ylusZq7Si5xpam/aQU7UG5Xz+L/rrwBIyk4rmhi0/mV98sXRuVCdC58HsXVnJS3s7/De4Lu/nXGJTqTeCW0N5pZ+lvkc1tQ9g1KobfnQZgtKd17fUExhlQ/rKgDDS8R5ULPU1bYEfXut2jyP9tz3lpgKEpNpYCdaKIGuUWSWrlL+Hs4/A2IVyt3vkiObiJzokWkXEFJMB90KtpTCN9sd8z97TKGk4d4mgsR+M7+6ctojWfrKWEX2GGQiXx2JLmiTicH1/1bzoGDKxLvTpKMJJWebchOx9s6JWkv+a/0As+61+ZozfMwms6drow0FgsFoi27rfYmUlCi32kEDwaAuRZA4zJZrjl5zr47pVfq5plclhM7XqUtCyBZgixbpg8s8SqpdHKPagb/e9qupJmZzUXCfCIc9rF2mUTXzB+UdTCIHc3FlMpNnZY=
   file_glob: true
-  file: 
-    - "./VaultServiceIDFactory"
+    file: ".admin-token"
   skip_cleanup: true
   on:
-    repo: allthingsclowd/VaultServiceIDFactory
+    repo: allthingsclowd/Vault_MongoDB_Dynamic_Credentials
     tags: true
