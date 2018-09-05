@@ -1,4 +1,4 @@
-![https://travis-ci.org/allthingsclowd/VaultServiceIDFactory.svg?branch=master](https://travis-ci.org/allthingsclowd/VaultServiceIDFactory.svg?branch=master)
+![https://travis-ci.org/allthingsclowd/Vault_MongoDB_Dynamic_Credentials.svg?branch=master](https://travis-ci.org/allthingsclowd/Vault_MongoDB_Dynamic_Credentials.svg?branch=master)
 
 
 https://travis-ci.org/allthingsclowd/Vault_MongoDB_Dynamic_Credentials#
