@@ -7,7 +7,7 @@ source /usr/local/bootstrap/var.env
 IP=${LEADER_IP}
 
 if [ "${TRAVIS}" == "true" ]; then
-IP=${IP:-127.0.0.1}
+   IP="127.0.0.1"
 fi
 
 VAULT_ADDR=http://${IP}:8200
