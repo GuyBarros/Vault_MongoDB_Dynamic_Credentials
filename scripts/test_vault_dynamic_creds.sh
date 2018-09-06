@@ -16,19 +16,20 @@ VAULT_SKIP_VERIFY=true
 VAULT_TOKEN=`cat /usr/local/bootstrap/.vault-token`
 
 test_db_user () {
-    DYNAMIC_USER=`cat /usr/local/bootstrap/.dynamicuserdetails.txt | awk '{ for (x=1;x<=NF;x++) if ($x~"username") print $(x+1) }'`
-    DYNAMIC_PASSWORD=`cat /usr/local/bootstrap/.dynamicuserdetails.txt | awk '{ for (x=1;x<=NF;x++) if ($x~"password") print $(x+1) }'`
+    echo $1
+    DYNAMIC_USER=`cat $1 | awk '{ for (x=1;x<=NF;x++) if ($x~"username") print $(x+1) }'`
+    DYNAMIC_PASSWORD=`cat $1 | awk '{ for (x=1;x<=NF;x++) if ($x~"password") print $(x+1) }'`
     mongo ${DB}/vault_demo_db -u ${DYNAMIC_USER} -p ${DYNAMIC_PASSWORD} --eval 'var document = {name  : "my_mongo_test",title : "vaultb test",};db.MyCollection.insert(document);'
 }
 
 sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault status
 
 echo "Testing the DB READ Role - This should fail to WRITE!"
-sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-read-role > /usr/local/bootstrap/.dynamicuserdetails.txt
-test_db_user
+sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-read-role > /usr/local/bootstrap/.dynamicreaduserdetails.txt
+test_db_user /usr/local/bootstrap/.dynamicreaduserdetails.txt
 
-echo "Testing the DB Owner Role - This should successfully WRITE to database"
-sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-readwrite-role > /usr/local/bootstrap/.dynamicuserdetails.txt
-test_db_user
+echo "Testing the DB READWRITE Role - This should successfully WRITE!"
+sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-readwrite-role > /usr/local/bootstrap/.dynamicwriteuserdetails.txt
+test_db_user /usr/local/bootstrap/.dynamicwriteuserdetails.txt
 
 echo 'Finished Vault MongoDB Dynamic Credentials Testing'

@@ -33,13 +33,13 @@ enable_dynamic_credentials_via_vault_client () {
     # configure vault mongodb plugin with 2 user roles
     sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault write database/config/my-mongodb-database \
         plugin_name=mongodb-database-plugin \
-        allowed_roles="my-dbOwner-role, my-dbAdmin-role" \
+        allowed_roles="my-read-role, my-readwrite-role" \
         connection_url="mongodb://{{username}}:{{password}}@${DB}:27017/vault_demo_db?ssl=false" \
         username="vault_admin" \
         password="r3ally5tr0ngPa55w0rd"
 
     # configure vault mnongodb user role my-write-role
-    sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault write database/roles/my-write-role \
+    sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault write database/roles/my-readwrite-role \
         db_name=my-mongodb-database \
         creation_statements='{ "db": "vault_demo_db", "roles": [{ "role": "readWrite" }] }' \
         default_ttl="1h" \
@@ -130,8 +130,8 @@ EOF
 
 }
 
-enable_dynamic_credentials_via_vault_api
-#enable_dynamic_credentials_via_vault_client
+#enable_dynamic_credentials_via_vault_api
+enable_dynamic_credentials_via_vault_client
 
 
 
