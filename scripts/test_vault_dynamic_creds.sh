@@ -25,7 +25,7 @@ test_db_user () {
 sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault status
 
 echo "Testing the DB Admin Role - This should fail to list all the users"
-sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-dbAdmin-role > /usr/local/bootstrap/.dynamicuserdetails.txt
+sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-dbReadOnly-role > /usr/local/bootstrap/.dynamicuserdetails.txt
 test_db_user
 
 echo "Testing the DB Owner Role - This should successfully list all the users"

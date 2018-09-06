@@ -46,7 +46,7 @@ enable_dynamic_credentials_via_vault_client () {
         max_ttl="24h"
 
     # configure vault mnongodb user role my-dbAdmin-role    
-    sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault write database/roles/my-dbAdmin-role \
+    sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault write database/roles/my-dbReadOnly-role \
         db_name=my-mongodb-database \
         creation_statements='{ "db": "vault_demo_db", "roles": [{ "role": "read" }] }' \
         default_ttl="1h" \
