@@ -99,12 +99,12 @@ EOF
     {
         "db_name": "my-mongodb-database",
         "creation_statements": [
-                                    "db": "admin",
-                                    "roles": [
+                                    db: "admin",
+                                    roles: [
                                                 {
-                                                    "role": "dbOwner",
-                                                    "db": "vault_demo_db"
-                                                },
+                                                    role: "dbOwner",
+                                                    db: "vault_demo_db"
+                                                }
                                             ]
                                 ],
         "default_ttl": "1h",
@@ -123,12 +123,12 @@ EOF
     {
         "db_name": "my-mongodb-database",
         "creation_statements": {
-                                    "db": "admin",
-                                    "roles": [
-                                                map[string]string{
-                                                    "role": "read",
-                                                    "db": "vault_demo_db"
-                                                },
+                                    db: "admin",
+                                    roles: [
+                                                {
+                                                    role: "read",
+                                                    db: "vault_demo_db"
+                                                }
                                             ]
                                 },
         "default_ttl": "1h",
