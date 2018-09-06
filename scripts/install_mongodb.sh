@@ -54,8 +54,9 @@ install_mongodb () {
 echo 'Start of Application Installation and Test'
 setup_environment
 install_mongodb
-if [ "${TRAVIS}" != "true" ]; then
-    secure_mongodb
-fi
+secure_mongodb
+# if [ "${TRAVIS}" != "true" ]; then
+#     secure_mongodb
+# fi
 echo 'End of Application Installation and Test'
 
