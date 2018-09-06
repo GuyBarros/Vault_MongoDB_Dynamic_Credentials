@@ -20,7 +20,7 @@ test_db_user () {
     DYNAMIC_USER=`cat $1 | awk '{ for (x=1;x<=NF;x++) if ($x~"username") print $(x+1) }'`
     DYNAMIC_PASSWORD=`cat $1 | awk '{ for (x=1;x<=NF;x++) if ($x~"password") print $(x+1) }'`
     mongo ${DB}/vault_demo_db -u ${DYNAMIC_USER} -p ${DYNAMIC_PASSWORD} --eval 'var document = {name  : "my_mongo_test",title : "vaulttest",};db.MyCollection.insert(document);'
-    if [ $? > 0 ] && [ $2 == "EXPECTPASS"]; then
+    if [[ $? > 0 ] && [ $2 == "EXPECTPASS" ]]; then
         echo -e "SOMETHINGS GONE WRONG WITH THE TESTS\n"
         exit 1
     fi
