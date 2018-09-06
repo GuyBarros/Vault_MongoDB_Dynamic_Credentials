@@ -80,7 +80,7 @@ EOF
     tee database-config-file.json <<EOF
     {
     "plugin_name": "mongodb-database-plugin",
-    "allowed_roles": "my-dbOwner-role, my-dbReadOnly-role",
+    "allowed_roles": "my-read-role, my-readwrite-role",
     "connection_url": "mongodb://{{username}}:{{password}}@${DB}:27017/vault_demo_db?ssl=false",
     "write_concern": "{ \"wmode\": \"majority\", \"wtimeout\": 5000 }",
     "username": "vault_admin",
