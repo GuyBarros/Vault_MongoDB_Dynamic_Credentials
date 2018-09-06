@@ -7,12 +7,14 @@ IP=${CIDR%%/24}
 
 if [ -d /vagrant ]; then
   LOG="/vagrant/logs/vault_${HOSTNAME}.log"
+  VAULT_AUDIT_LOG="/vagrant/logs/vault_audit_${HOSTNAME}.log"
 else
   LOG="vault.log"
+  VAULT_AUDIT_LOG="vault_audit.log"
 fi
 
 if [ "${TRAVIS}" == "true" ]; then
-IP=${IP:-127.0.0.1}
+  IP="127.0.0.1"
 fi
 
 which /usr/local/bin/vault &>/dev/null || {
@@ -44,5 +46,24 @@ if [[ "${HOSTNAME}" =~ "leader" ]] || [ "${TRAVIS}" == "true" ]; then
   #copy token to known location
   sudo find / -name '.vault-token' -exec cp {} /usr/local/bootstrap/.vault-token \; -quit
   sudo chmod ugo+r /usr/local/bootstrap/.vault-token
+
+  export VAULT_TOKEN=`cat /usr/local/bootstrap/.vault-token`
+  export VAULT_ADDR="http://${IP}:8200"
+
+  # configure Audit Backend
+  tee audit-backend-file.json <<EOF
+  {
+    "type": "file",
+    "options": {
+      "path": "${VAULT_AUDIT_LOG}"
+    }
+  }
+EOF
+
+  curl \
+      --header "X-Vault-Token: ${VAULT_TOKEN}" \
+      --request PUT \
+      --data @audit-backend-file.json \
+      ${VAULT_ADDR}/v1/sys/audit/file-audit
 
 fi
