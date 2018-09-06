@@ -16,10 +16,10 @@ VAULT_SKIP_VERIFY=true
 VAULT_TOKEN=`cat /usr/local/bootstrap/.vault-token`
 
 test_db_user () {
-    echo $1
+    cat $1
     DYNAMIC_USER=`cat $1 | awk '{ for (x=1;x<=NF;x++) if ($x~"username") print $(x+1) }'`
     DYNAMIC_PASSWORD=`cat $1 | awk '{ for (x=1;x<=NF;x++) if ($x~"password") print $(x+1) }'`
-    mongo ${DB}/vault_demo_db -u ${DYNAMIC_USER} -p ${DYNAMIC_PASSWORD} --eval 'var document = {name  : "my_mongo_test",title : "vaultb test",};db.MyCollection.insert(document);'
+    mongo ${DB}/vault_demo_db -u ${DYNAMIC_USER} -p ${DYNAMIC_PASSWORD} --eval 'var document = {name  : "my_mongo_test",title : "vaulttest",};db.MyCollection.insert(document);'
 }
 
 sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault status
