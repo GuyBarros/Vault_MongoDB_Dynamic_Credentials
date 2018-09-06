@@ -94,11 +94,11 @@ EOF
     --data @database-config-file.json \
     ${VAULT_ADDR}/v1/database/config/my-mongodb-database
 
-    # configure vault mongodb user role my-dbOwner-role
+    # configure vault mongodb user role my-read-role
     tee database-role-a-file.json <<EOF
     {
         "db_name": "my-mongodb-database",
-        "creation_statements": "{ \"db\": \"vault_demo_db\", \"roles\": [{ \"role\": \"dbOwner\" }] }",
+        "creation_statements": "{ \"db\": \"vault_demo_db\", \"roles\": [{ \"role\": \"read\" }] }",
         "default_ttl": "1h",
         "max_ttl": "24h"
     }
@@ -108,13 +108,13 @@ EOF
     --header "X-Vault-Token: ${VAULT_TOKEN}" \
     --request POST \
     --data @database-role-a-file.json \
-    ${VAULT_ADDR}/v1/database/roles/my-dbOwner-role
+    ${VAULT_ADDR}/v1/database/roles/my-read-role
 
-    # configure vault mnongodb user role my-dbReadOnly-role    
-    tee database-role-a-file.json <<EOF
+    # configure vault mnongodb user role my-readWrite-role    
+    tee database-role-b-file.json <<EOF
     {
         "db_name": "my-mongodb-database",
-        "creation_statements":  "{ \"db\": \"vault_demo_db\", \"roles\": [{ \"role\": \"read\" }] }",
+        "creation_statements":  "{ \"db\": \"vault_demo_db\", \"roles\": [{ \"role\": \"readWrite\" }] }",
         "default_ttl": "1h",
         "max_ttl": "24h"
     }
@@ -123,8 +123,8 @@ EOF
     curl \
     --header "X-Vault-Token: ${VAULT_TOKEN}" \
     --request POST \
-    --data @database-role-a-file.json \
-    ${VAULT_ADDR}/v1/database/roles/my-dbReadOnly-role
+    --data @database-role-b-file.json \
+    ${VAULT_ADDR}/v1/database/roles/my-readWrite-role
 
     echo 'Finished Vault MongoDB Dynamic Credentials Config using Vault API calls'
 
