@@ -1,7 +1,7 @@
 Key                Value
 ---                -----
-lease_id           database/creds/my-read-role/ed3a1bac-a7d1-4623-80ce-a096c465f8c1
+lease_id           database/creds/my-read-role/e7560f6b-1965-1c36-9e41-a637f6bb18ee
 lease_duration     1h
 lease_renewable    true
-password           A1a-5wCaWuPE13HcHhxy
-username           v-root-my-read-role-1oyazOzV4uR4W1OE9olM-1536274945
+password           A1a-6cNQiZScstzaUfmQ
+username           v-root-my-read-role-SFcBztfXuLNhkpWIuWHE-1536275167
