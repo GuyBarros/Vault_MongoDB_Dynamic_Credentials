@@ -47,8 +47,8 @@ if [[ "${HOSTNAME}" =~ "leader" ]] || [ "${TRAVIS}" == "true" ]; then
   sudo find / -name '.vault-token' -exec cp {} /usr/local/bootstrap/.vault-token \; -quit
   sudo chmod ugo+r /usr/local/bootstrap/.vault-token
 
-  export VAULT_TOKEN=`cat /usr/local/bootstrap/.vault-token`
-  export VAULT_ADDR="http://${IP}:8200"
+  VAULT_TOKEN=`cat /usr/local/bootstrap/.vault-token`
+  VAULT_ADDR="http://${IP}:8200"
 
   # configure Audit Backend
   tee audit-backend-file.json <<EOF
