@@ -98,7 +98,7 @@ EOF
     tee database-role-a-file.json <<EOF
     {
         "db_name": "my-mongodb-database",
-        "creation_statements": { "db": "vault_demo_db", "roles": [{ "role": "dbOwner" }] },
+        "creation_statements": [{ "db": "vault_demo_db", "roles": [{ "role": "dbOwner" }] }],
         "default_ttl": "1h",
         "max_ttl": "24h"
     }
@@ -114,7 +114,7 @@ EOF
     tee database-role-a-file.json <<EOF
     {
         "db_name": "my-mongodb-database",
-        "creation_statements": { "db": "vault_demo_db", "roles": [{ "role": "read" }] },
+        "creation_statements":[ { "db": "vault_demo_db", "roles": [{ "role": "read" }] } ],
         "default_ttl": "1h",
         "max_ttl": "24h"
     }
