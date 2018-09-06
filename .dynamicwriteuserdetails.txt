@@ -1,7 +1,7 @@
 Key                Value
 ---                -----
-lease_id           database/creds/my-readwrite-role/79cb8ed1-a01b-387b-d625-a741b93fc74d
+lease_id           database/creds/my-readwrite-role/baf05f22-8dd7-f1e8-0958-8fd5d8d61e00
 lease_duration     1h
 lease_renewable    true
-password           A1a-5yJ5pSVi7i5lQEPa
-username           v-root-my-readwrite-ro-6Vph7RLl6HS9R4Og3t1r-1536274367
+password           A1a-17RHcxZVpspHxQ9L
+username           v-root-my-readwrite-ro-2eybDN4FA6szURbpndPz-1536274945
