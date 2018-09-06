@@ -27,7 +27,7 @@ setup_environment () {
 secure_mongodb () {
     # Enable MongoDB Authentication
     sudo service mongod stop
-    echo -e "security:\n\tauthorization:\tenabled\n" | sudo tee -a /etc/mongod.conf
+    echo -e "security:\n    authorization:  enabled\n" | sudo tee -a /etc/mongod.conf
     # Bind to all interfaces - not just localhost
     sudo sed -i '/bindIp:/s/^/#/' /etc/mongod.conf
     sudo service mongod start
