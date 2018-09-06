@@ -124,7 +124,7 @@ EOF
     --header "X-Vault-Token: ${VAULT_TOKEN}" \
     --request POST \
     --data @database-role-b-file.json \
-    ${VAULT_ADDR}/v1/database/roles/my-readWrite-role
+    ${VAULT_ADDR}/v1/database/roles/my-readwrite-role
 
     echo 'Finished Vault MongoDB Dynamic Credentials Config using Vault API calls'
 

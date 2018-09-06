@@ -28,7 +28,7 @@ sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read databa
 test_db_user
 
 echo "Testing the DB Owner Role - This should successfully WRITE to database"
-sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-write-role > /usr/local/bootstrap/.dynamicuserdetails.txt
+sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-readwrite-role > /usr/local/bootstrap/.dynamicuserdetails.txt
 test_db_user
 
 echo 'Finished Vault MongoDB Dynamic Credentials Testing'
