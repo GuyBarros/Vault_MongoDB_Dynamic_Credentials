@@ -74,7 +74,7 @@ EOF
     --header "X-Vault-Token: ${VAULT_TOKEN}" \
     --request POST \
     --data @database-backend-file.json \
-    ${VAULT_ADDR}/v1/sys/mounts/my-mount
+    ${VAULT_ADDR}/v1/sys/mounts/database
 
     # configure vault mongodb plugin with 2 user roles
     tee database-config-file.json <<EOF
