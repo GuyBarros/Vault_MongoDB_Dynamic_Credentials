@@ -204,7 +204,7 @@ For a production environment please ensure that SSL is used for all data in tran
 This is only a very small use case for the fantastic secrets management tool that is [HashiCorp's VAULT](https://www.vaultproject.io/)
 
 ## TODO
-
+- travis-ci script failures not reporting correctly - l8tr
 
 ## Done
 
@@ -217,3 +217,4 @@ This is only a very small use case for the fantastic secrets management tool tha
 - build simple tests to verify creds
 - add API version, currently CLI
 - updated ReadMe
+
