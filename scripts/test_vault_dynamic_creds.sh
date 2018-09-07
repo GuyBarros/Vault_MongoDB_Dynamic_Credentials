@@ -41,12 +41,12 @@ test_db_user () {
 
 sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault status
 
-echo "Testing the DB READ Role - This should fail to WRITE!"
-sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-read-role > /usr/local/bootstrap/.dynamicuserdetails.txt
-test_db_user /usr/local/bootstrap/.dynamicuserdetails.txt EXPECTFAIL my-read-role
-
 echo "Testing the DB READWRITE Role - This should successfully WRITE!"
 sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-readwrite-role > /usr/local/bootstrap/.dynamicuserdetails.txt
 test_db_user /usr/local/bootstrap/.dynamicuserdetails.txt EXPECTPASS my-readwrite-role
+
+echo "Testing the DB READ Role - This should fail to WRITE!"
+sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-read-role > /usr/local/bootstrap/.dynamicuserdetails.txt
+test_db_user /usr/local/bootstrap/.dynamicuserdetails.txt EXPECTFAIL my-read-role
 
 echo 'Finished Vault MongoDB Dynamic Credentials Testing'
