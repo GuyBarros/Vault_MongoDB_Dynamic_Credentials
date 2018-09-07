@@ -19,9 +19,10 @@ test_db_user () {
     cat $1
     DYNAMIC_USER=`cat $1 | awk '{ for (x=1;x<=NF;x++) if ($x~"username") print $(x+1) }'`
     DYNAMIC_PASSWORD=`cat $1 | awk '{ for (x=1;x<=NF;x++) if ($x~"password") print $(x+1) }'`
-    mongo ${DB}/vault_demo_db -u ${DYNAMIC_USER} -p ${DYNAMIC_PASSWORD} /usr/local/bootstrap/conf/performTestWrite.js
-    echo $?
-    if [ $? -ne 0 ] && [ $2 == "EXPECTFAIL" ]; then
+    RESULT=`mongo ${DB}/vault_demo_db -u ${DYNAMIC_USER} -p ${DYNAMIC_PASSWORD} /usr/local/bootstrap/conf/performTestWrite.js`
+    echo ${RESULT}
+ 
+    if [[ ${RESULT} = *"Error"* ]] && [ $2 == "EXPECTFAIL" ]; then
         echo -e "SOMETHINGS GONE WRONG WITH THE TESTS\n"
         exit 1
     fi
