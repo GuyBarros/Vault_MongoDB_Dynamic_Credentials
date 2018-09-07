@@ -50,3 +50,4 @@ sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read databa
 test_db_user /usr/local/bootstrap/.dynamicuserdetails.txt EXPECTFAIL my-read-role
 
 echo 'Finished Vault MongoDB Dynamic Credentials Testing'
+exit 0
