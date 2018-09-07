@@ -145,58 +145,135 @@ enable_dynamic_credentials_via_vault_api
 
 The test output, if successful, should look something like this:
 ``` bash
-    MONGOSVR: Start Vault MongoDB Dynamic Credentials Testing
-    MONGOSVR: K
-    MONGOSVR: e
-    MONGOSVR: y
-    MONGOSVR:
-    MONGOSVR:
-    MONGOSVR:
-    MONGOSVR:
-    MONGOSVR:
-    MONGOSVR:
-    MONGOSVR:
-    MONGOSVR:
-    MONGOSVR:
-    MONGOSVR:
-    MONGOSVR:
-    MONGOSVR:
-    MONGOSVR:
-    MONGOSVR: V
-    MONGOSVR: a
-    MONGOSVR: lue
-    MONGOSVR: ---             -----
-    MONGOSVR: Seal Type       shamir
-    MONGOSVR: Sealed          false
-    MONGOSVR: Total Shares    1
-    MONGOSVR: Threshold       1
-    MONGOSVR: Version         0.11.0
-    MONGOSVR: Cluster Name    vault-cluster-6dbcdb23
-    MONGOSVR: Cluster ID      8ada2c9c-6de3-950d-9ed2-e1742132e1cd
-    MONGOSVR: HA Enabled      true
-    MONGOSVR: HA Cluster      https://192.168.2.11:8201
-    MONGOSVR: HA Mode         active
-    MONGOSVR: Testing the DB READ Role - This should fail to WRITE!
-    MONGOSVR: Key                Value
-    MONGOSVR: ---                -----
-    MONGOSVR: lease_id           database/creds/my-read-role/9c64393b-4dce-4ea5-b06e-dceabb9e30a3
-    MONGOSVR: lease_duration     1h
-    MONGOSVR: lease_renewable    true
-    MONGOSVR: password           A1a-15IpQHouasfLn7EJ
-    MONGOSVR: username           v-root-my-read-role-2EdcNCQ5lT2nzJ0zFj9d-1536319430
-    MONGOSVR: MongoDB shell version v3.4.17 connecting to: mongodb://192.168.2.12:27017/vault_demo_db MongoDB server version: 3.4.17 { "writeError" : { "code" : 13, "errmsg" : "not authorized on vault_demo_db to execute command { insert: \"MyCollection\", documents: [ { _id: ObjectId('5b925fc6da14f22564d6eec0'), name: \"my_mongo_test\", title: \"vaulttest\" } ], ordered: true }" } }
-    MONGOSVR: SUCCESS: The database write test has failed for this ROLE - my-read-role - as expected!
-    MONGOSVR: Testing the DB READWRITE Role - This should successfully WRITE!
-    MONGOSVR: Key                Value
-    MONGOSVR: ---                -----
-    MONGOSVR: lease_id           database/creds/my-readwrite-role/657c8168-7626-2009-2235-e138c05b3c09
-    MONGOSVR: lease_duration     1h
-    MONGOSVR: lease_renewable    true
-    MONGOSVR: password           A1a-SUkBhlOjFdmuagey
-    MONGOSVR: username           v-root-my-readwrite-ro-BMIYX62LfMKpgaqXa9S1-1536319430
-    MONGOSVR: MongoDB shell version v3.4.17 connecting to: mongodb://192.168.2.12:27017/vault_demo_db MongoDB server version: 3.4.17 { "nInserted" : 1 }
-    MONGOSVR: SUCCESS: The database write test has succeeded for this ROLE - my-readwrite-role - as expected!
-    MONGOSVR: Finished Vault MongoDB Dynamic Credentials Testing
+Key             Value
+---             -----
+Seal Type       shamir
+Sealed          false
+Total Shares    1
+Threshold       1
+Version         0.11.0
+Cluster Name    vault-cluster-4186389e
+Cluster ID      b6d9d1a0-20fe-4584-fd14-b2a11f3f65af
+HA Enabled      true
+HA Cluster      https://127.0.0.1:8201
+HA Mode         active
++source /usr/local/bootstrap/var.env
+++export LEADER_NAME=leader01.vagrant.local
+++LEADER_NAME=leader01.vagrant.local
+++export LEADER_IP=192.168.2.11
+++LEADER_IP=192.168.2.11
+++export MONGO_IP=192.168.2.12
+++MONGO_IP=192.168.2.12
++echo 'Start Vault MongoDB Dynamic Credentials Config'
+Start Vault MongoDB Dynamic Credentials Config
++IP=192.168.2.11
++DB=192.168.2.12
++'[' true == true ']'
++IP=127.0.0.1
++DB=127.0.0.1
++'[' -d /vagrant ']'
++LOG=vault_audit.log
+++cat /usr/local/bootstrap/.vault-token
++VAULT_TOKEN=96afad6d-ad37-fcf4-10ab-4d98d51eda1f
++VAULT_ADDR=http://127.0.0.1:8200
++enable_dynamic_credentials_via_vault_api
++echo 'Start Vault MongoDB Dynamic Credentials Config using API calls'
+Start Vault MongoDB Dynamic Credentials Config using API calls
++tee database-backend-file.json
+    {
+    "type": "database",
+    "config": {
+        "force_no_cache": true
+    }
+    }
++curl --header 'X-Vault-Token: 96afad6d-ad37-fcf4-10ab-4d98d51eda1f' --request POST --data @database-backend-file.json http://127.0.0.1:8200/v1/sys/mounts/database
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100    83    0     0  100    83      0   4969 --:--:-- --:--:-- --:--:--  5187
++tee database-config-file.json
+    {
+    "plugin_name": "mongodb-database-plugin",
+    "allowed_roles": "my-read-role, my-readwrite-role",
+    "connection_url": "mongodb://{{username}}:{{password}}@127.0.0.1:27017/vault_demo_db?ssl=false",
+    "write_concern": "{ \"wmode\": \"majority\", \"wtimeout\": 5000 }",
+    "username": "vault_admin",
+    "password": "r3ally5tr0ngPa55w0rd"
+    }
++curl --header 'X-Vault-Token: 96afad6d-ad37-fcf4-10ab-4d98d51eda1f' --request POST --data @database-config-file.json http://127.0.0.1:8200/v1/database/config/my-mongodb-database
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   511  100   162  100   349    157    338  0:00:01  0:00:01 --:--:--   339
+100   511  100   162  100   349    157    338  0:00:01  0:00:01 --:--:--   339
+{"request_id":"4b09eee2-646d-55b5-e657-142ec8b6d1da","lease_id":"","renewable":false,"lease_duration":0,"data":null,"wrap_info":null,"warnings":null,"auth":null}
++tee database-role-a-file.json
+    {
+        "db_name": "my-mongodb-database",
+        "creation_statements": "{ \"db\": \"vault_demo_db\", \"roles\": [{ \"role\": \"read\" }] }",
+        "default_ttl": "1h",
+        "max_ttl": "24h"
+    }
++curl --header 'X-Vault-Token: 96afad6d-ad37-fcf4-10ab-4d98d51eda1f' --request POST --data @database-role-a-file.json http://127.0.0.1:8200/v1/database/roles/my-read-role
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   203    0     0  100   203      0  36882 --:--:-- --:--:-- --:--:-- 40600
++tee database-role-b-file.json
+    {
+        "db_name": "my-mongodb-database",
+        "creation_statements":  "{ \"db\": \"vault_demo_db\", \"roles\": [{ \"role\": \"readWrite\" }] }",
+        "default_ttl": "1h",
+        "max_ttl": "24h"
+    }
++curl --header 'X-Vault-Token: 96afad6d-ad37-fcf4-10ab-4d98d51eda1f' --request POST --data @database-role-b-file.json http://127.0.0.1:8200/v1/database/roles/my-readwrite-role
+  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current
+                                 Dload  Upload   Total   Spent    Left  Speed
+
+  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0
+100   209    0     0  100   209      0  40053 --:--:-- --:--:-- --:--:-- 41800
++echo 'Finished Vault MongoDB Dynamic Credentials Config using Vault API calls'
+Finished Vault MongoDB Dynamic Credentials Config using Vault API calls
+Start Vault MongoDB Dynamic Credentials Testing
+Key             Value
+---             -----
+Seal Type       shamir
+Sealed          false
+Total Shares    1
+Threshold       1
+Version         0.11.0
+Cluster Name    vault-cluster-4186389e
+Cluster ID      b6d9d1a0-20fe-4584-fd14-b2a11f3f65af
+HA Enabled      true
+HA Cluster      https://127.0.0.1:8201
+HA Mode         active
+Testing the DB READWRITE Role - This should successfully WRITE!
+Key                Value
+---                -----
+lease_id           database/creds/my-readwrite-role/e16c1c33-03f7-b6b6-27cb-1089a05be53b
+lease_duration     1h
+lease_renewable    true
+password           A1a-4J0XnPRzpLNaOrqo
+username           v-root-my-readwrite-ro-3GIyGKWs3waz5Nc1bkHE-1536329141
+MongoDB shell version v3.4.17 connecting to: mongodb://127.0.0.1:27017/vault_demo_db MongoDB server version: 3.4.17 { "nInserted" : 1 }
+SUCCESS: The database write test has succeeded for this ROLE - my-readwrite-role - as expected!
+
+Testing the DB READ Role - This should fail to WRITE!
+Key                Value
+---                -----
+lease_id           database/creds/my-read-role/935fef49-4e2d-0236-7929-d907761d6de9
+lease_duration     1h
+lease_renewable    true
+password           A1a-4AtMgbwn8CBI72a7
+username           v-root-my-read-role-4hJXSONn7xNZNCIQygJl-1536329141
+MongoDB shell version v3.4.17 connecting to: mongodb://127.0.0.1:27017/vault_demo_db MongoDB server version: 3.4.17 { "writeError" : { "code" : 13, "errmsg" : "not authorized on vault_demo_db to execute command { insert: \"MyCollection\", documents: [ { _id: ObjectId('5b9285b577e1fbdd7c8afbe4'), name: \"my_mongo_test\", title: \"vaulttest\" } ], ordered: true }" } }
+SUCCESS: The database write test has failed for this ROLE - my-read-role - as expected!
+
+Finished Vault MongoDB Dynamic Credentials Testing
+
 ```
 NOTE: For the purpose of this demo I have deliberately displayed the ephemeral dynamic credentials and yes I've hardcoded the test db password :)
 For a production environment please ensure that SSL is used for all data in transit, also I have not configured SSL on theb MongoDB.
