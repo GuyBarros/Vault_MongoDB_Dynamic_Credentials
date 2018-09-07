@@ -16,6 +16,7 @@ If running a [Vagrant Environment](https://www.vagrantup.com/docs/installation/)
 
 ``` bash
 git clone git@github.com:allthingsclowd/Vault_MongoDB_Dynamic_Credentials.git
+cd Vault_MongoDB_Dynamic_Credentials
 vagrant up
 ```
 
