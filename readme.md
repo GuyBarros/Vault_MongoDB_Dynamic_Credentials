@@ -206,12 +206,6 @@ This is only a very small use case for the fantastic secrets management tool tha
 ## TODO
 
 
-### New Features
-
-
-### Refactor
-
-
 ## Done
 
 - tidy/reset cloned repo, purge unwanted crap
