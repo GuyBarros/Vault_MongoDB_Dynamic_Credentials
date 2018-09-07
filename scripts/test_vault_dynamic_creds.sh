@@ -24,16 +24,17 @@ test_db_user () {
  
     if [[ ${RESULT} == *"Error"* ]] && [ $2 == "EXPECTPASS" ]; then
         echo -e "FAIL: The database read write test have not worked as expected!\n"
-        exit 1
+        return 1
     fi
 
     if [[ ${RESULT} == *"Error"* ]] && [ $2 == "EXPECTFAIL" ]; then
         echo -e "SUCCESS: The database write test has failed for this ROLE - $3 - as expected!\n"
-        return
+        return 0
     fi
 
     if [[ ${RESULT} != *"Error"* ]] && [ $2 == "EXPECTPASS" ]; then
         echo -e "SUCCESS: The database write test has succeeded for this ROLE - $3 - as expected!\n"
+        return 0
     fi
 
 }
@@ -42,10 +43,18 @@ sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault status
 
 echo "Testing the DB READ Role - This should fail to WRITE!"
 sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-read-role > /usr/local/bootstrap/.dynamicuserdetails.txt
-test_db_user /usr/local/bootstrap/.dynamicuserdetails.txt EXPECTFAIL my-read-role
+EXITCODE1=$(test_db_user /usr/local/bootstrap/.dynamicuserdetails.txt EXPECTFAIL my-read-role)
 
 echo "Testing the DB READWRITE Role - This should successfully WRITE!"
 sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-readwrite-role > /usr/local/bootstrap/.dynamicuserdetails.txt
-test_db_user /usr/local/bootstrap/.dynamicuserdetails.txt EXPECTPASS my-readwrite-role
+EXITCODE2=$(test_db_user /usr/local/bootstrap/.dynamicuserdetails.txt EXPECTPASS my-readwrite-role)
 
 echo 'Finished Vault MongoDB Dynamic Credentials Testing'
+
+if [[ ${EXITCODE1} -gt 0 ]] || [[ ${EXITCODE2} -gt 0 ]]; then
+    echo -e "TEST FAIL\n"
+    exit 1
+else
+    echo -e "TEST PASS\n"
+    exit 0
+fi
