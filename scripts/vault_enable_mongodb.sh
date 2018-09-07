@@ -130,8 +130,8 @@ EOF
 
 }
 
-#enable_dynamic_credentials_via_vault_api
-enable_dynamic_credentials_via_vault_client
+enable_dynamic_credentials_via_vault_api
+#enable_dynamic_credentials_via_vault_client
 
 
 
