@@ -22,20 +22,30 @@ test_db_user () {
     RESULT=`mongo ${DB}/vault_demo_db -u ${DYNAMIC_USER} -p ${DYNAMIC_PASSWORD} /usr/local/bootstrap/conf/performTestWrite.js`
     echo ${RESULT}
  
-    if [[ ${RESULT} = *"Error"* ]] && [ $2 == "EXPECTFAIL" ]; then
-        echo -e "SOMETHINGS GONE WRONG WITH THE TESTS\n"
+    if [[ ${RESULT} = *"Error"* ]] && [ $2 == "EXPECTPASS" ]; then
+        echo -e "FAIL: The database read write test have not worked as expected!\n"
         exit 1
     fi
+
+    if [[ ${RESULT} = *"Error"* ]] && [ $2 == "EXPECTFAIL" ]; then
+        echo -e "SUCCESS: The database write test has failed for this ROLE - $3 - as expected!\n"
+        return
+    fi
+
+    if ![[ ${RESULT} = *"Error"* ]] && [ $2 == "EXPECTPASS" ]; then
+        echo -e "SUCCESS: The database write test has succeeded for this ROLE - $3 - as expected!\n"
+    fi
+
 }
 
 sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault status
 
 echo "Testing the DB READ Role - This should fail to WRITE!"
-sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-read-role > /usr/local/bootstrap/.dynamicreaduserdetails.txt
-test_db_user /usr/local/bootstrap/.dynamicreaduserdetails.txt EXPECTFAIL
+sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-read-role > /usr/local/bootstrap/.dynamicuserdetails.txt
+test_db_user /usr/local/bootstrap/.dynamicuserdetails.txt EXPECTFAIL my-readwrite-role
 
 echo "Testing the DB READWRITE Role - This should successfully WRITE!"
-sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-readwrite-role > /usr/local/bootstrap/.dynamicwriteuserdetails.txt
-test_db_user /usr/local/bootstrap/.dynamicwriteuserdetails.txt EXPECTPASS
+sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault read database/creds/my-readwrite-role > /usr/local/bootstrap/.dynamicuserdetails.txt
+test_db_user /usr/local/bootstrap/.dynamicuserdetails.txt EXPECTPASS my-read-role
 
 echo 'Finished Vault MongoDB Dynamic Credentials Testing'
