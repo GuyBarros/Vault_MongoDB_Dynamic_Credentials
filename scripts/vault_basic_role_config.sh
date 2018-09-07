@@ -20,25 +20,6 @@ fi
 VAULT_TOKEN=`cat /usr/local/bootstrap/.vault-token`
 sudo VAULT_TOKEN=${VAULT_TOKEN} VAULT_ADDR="http://${IP}:8200" vault secrets enable -version=1 kv
 
-# configure Audit Backend
-
-VAULT_AUDIT_LOG="${LOG}"
-
-tee audit-backend-file.json <<EOF
-{
-  "type": "file",
-  "options": {
-    "path": "${VAULT_AUDIT_LOG}"
-  }
-}
-EOF
-
-curl \
-    --header "X-Vault-Token: ${VAULT_TOKEN}" \
-    --request PUT \
-    --data @audit-backend-file.json \
-    ${VAULT_ADDR}/v1/sys/audit/file-audit
-
 # use root policy to create admin & provisioner policies
 # see https://www.hashicorp.com/resources/policies-vault
 

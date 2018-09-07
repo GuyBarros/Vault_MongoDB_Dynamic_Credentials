@@ -27,8 +27,7 @@ setup_environment () {
 secure_mongodb () {
     # Enable MongoDB Authentication
     sudo service mongod stop
-    sudo echo "security:" >> /etc/mongod.conf
-    sudo echo " authorization:  enabled" >> /etc/mongod.conf
+    echo -e "security:\n    authorization:  enabled\n" | sudo tee -a /etc/mongod.conf
     # Bind to all interfaces - not just localhost
     sudo sed -i '/bindIp:/s/^/#/' /etc/mongod.conf
     sudo service mongod start
@@ -55,8 +54,9 @@ install_mongodb () {
 echo 'Start of Application Installation and Test'
 setup_environment
 install_mongodb
-if [ "${TRAVIS}" != "true" ]; then
-    secure_mongodb
-fi
+secure_mongodb
+# if [ "${TRAVIS}" != "true" ]; then
+#     secure_mongodb
+# fi
 echo 'End of Application Installation and Test'
 
