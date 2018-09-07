@@ -31,7 +31,6 @@ test_db_user () {
 
     if [[ ${RESULT} = *"Error"* ]] && [[ $2 = "EXPECTFAIL" ]]; then
         echo -e "SUCCESS: The database write test has failed for this ROLE - $3 - as expected!\n"
-        exit 1
     fi
 
     if [[ ${RESULT} != *"Error"* ]] && [[ $2 = "EXPECTPASS" ]]; then
