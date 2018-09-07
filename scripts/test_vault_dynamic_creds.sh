@@ -51,7 +51,7 @@ EXITCODE2=$(test_db_user /usr/local/bootstrap/.dynamicuserdetails.txt EXPECTPASS
 
 echo 'Finished Vault MongoDB Dynamic Credentials Testing'
 
-if [[ ${EXITCODE1} -gt 0 ]] || [[ ${EXITCODE2} -gt 0 ]]; then
+if [[ ${EXITCODE1} != "0" ]] || [[ ${EXITCODE2} != "0" ]]; then
     echo -e "TEST FAIL\n"
     exit 1
 else
