@@ -16,16 +16,16 @@ before_script:
 script:
 - source ./var.env
 - export LEADER_IP=127.0.0.1
-- sudo VAULT_ADDR=http://127.0.0.1:8200 vault status
-- bash scripts/vault_enable_mongodb.sh
-- bash scripts/test_vault_dynamic_creds.sh 2>&1 result.txt
+- sudo VAULT_ADDR=http://127.0.0.1:8200 vault status 2>&1 | tee -a /home/travis/result.txt
+- bash scripts/vault_enable_mongodb.sh 2>&1 | tee -a /home/travis/result.txt
+- bash scripts/test_vault_dynamic_creds.sh 2>&1 | tee -a /home/travis/result.txt
 deploy:
   provider: releases
   api_key:
     secure: HIMy1VnYJJ5vF/yobaFDegYN6hABelnqfG5P8HlTuKsvz07yJAEXjActtyTqHaZ0t8SK+djLHQv7nr7La+a5aMLzUTI/12UQ0sc1921SN2Xv7NFT1I8GtMKDXNh02Wzm3Q4XXrKena11NAl+n7kCcU0yDeqHtyCes7AynQmIEf5AtgMf4ejboeuQREOAQ3S7a1dZJLSyjwCUB9jwvzjCikgT6xEBGc/fSZGLSiZ3BBniuZSdBbXF2ylusZq7Si5xpam/aQU7UG5Xz+L/rrwBIyk4rmhi0/mV98sXRuVCdC58HsXVnJS3s7/De4Lu/nXGJTqTeCW0N5pZ+lvkc1tQ9g1KobfnQZgtKd17fUExhlQ/rKgDDS8R5ULPU1bYEfXut2jyP9tz3lpgKEpNpYCdaKIGuUWSWrlL+Hs4/A2IVyt3vkiObiJzokWkXEFJMB90KtpTCN9sd8z97TKGk4d4mgsR+M7+6ctojWfrKWEX2GGQiXx2JLmiTicH1/1bzoGDKxLvTpKMJJWebchOx9s6JWkv+a/0As+61+ZozfMwms6drow0FgsFoi27rfYmUlCi32kEDwaAuRZA4zJZrjl5zr47pVfq5plclhM7XqUtCyBZgixbpg8s8SqpdHKPagb/e9qupJmZzUXCfCIc9rF2mUTXzB+UdTCIHc3FlMpNnZY=
   file_glob: true
   file: 
-    - "result.txt"
+    - "/home/travis/result.txt"
   skip_cleanup: true
   on:
     repo: allthingsclowd/Vault_MongoDB_Dynamic_Credentials
