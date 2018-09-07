@@ -22,17 +22,17 @@ test_db_user () {
     RESULT=`mongo ${DB}/vault_demo_db -u ${DYNAMIC_USER} -p ${DYNAMIC_PASSWORD} /usr/local/bootstrap/conf/performTestWrite.js`
     echo ${RESULT}
  
-    if [[ ${RESULT} == *"Error"* ]] && [ $2 == "EXPECTPASS" ]; then
+    if [ ${RESULT} == *"Error"* ] && [ $2 == "EXPECTPASS" ]; then
         echo -e "FAIL: The database read write test have not worked as expected!\n"
         return 1
     fi
 
-    if [[ ${RESULT} == *"Error"* ]] && [ $2 == "EXPECTFAIL" ]; then
+    if [ ${RESULT} == *"Error"* ] && [ $2 == "EXPECTFAIL" ]; then
         echo -e "SUCCESS: The database write test has failed for this ROLE - $3 - as expected!\n"
         return 0
     fi
 
-    if [[ ${RESULT} != *"Error"* ]] && [ $2 == "EXPECTPASS" ]; then
+    if [ ${RESULT} != *"Error"* ] && [ $2 == "EXPECTPASS" ]; then
         echo -e "SUCCESS: The database write test has succeeded for this ROLE - $3 - as expected!\n"
         return 0
     fi
